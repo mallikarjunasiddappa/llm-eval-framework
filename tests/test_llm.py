@@ -25,3 +25,8 @@ def test_describe_stockholm_quality_gate():
 
     rate = pass_rate(scores, 0.5)
     assert rate >= 0.8
+
+@pytest.mark.llm
+def test_unknown_model_gives_clear_error():
+    with pytest.raises(RuntimeError, match="gpt-does-not-exist"):
+        ask("Hi", model="gpt-does-not-exist")
