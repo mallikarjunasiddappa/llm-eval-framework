@@ -1,5 +1,5 @@
 import pytest
-from ai_qa.metrics import pass_rate
+from ai_qa.metrics import pass_rate, average_score
 
 @pytest.mark.metrics
 def test_two_of_three_pass():
@@ -19,3 +19,13 @@ def test_empty_scores_raise_error():
 ])
 def test_pass_rate_cases(scores, expected):
     assert pass_rate(scores, 0.7) == expected
+
+
+@pytest.mark.metrics
+def test_float_approx():
+    assert 0.1 + 0.2 == pytest.approx(0.3)
+
+@pytest.mark.metrics
+def test_average_score():
+    scores = {"login": 0.8, "search": 0.6, "logout": 0.9}
+    assert average_score(scores) == pytest.approx(0.7667, abs=0.001)

@@ -7,3 +7,8 @@ def pass_rate(scores, threshold):
             passed += 1
     return round(passed / len(scores), 2)
 
+def average_score(scores):
+    if not scores:
+        raise ValueError("No test cases to evaluate")
+    return sum(scores.values()) / len(scores)
+
