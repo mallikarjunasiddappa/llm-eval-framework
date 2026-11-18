@@ -16,7 +16,7 @@ def test_empty_scores_raise_error():
     ({"a": 0.9, "b": 0.8}, 1.0),
     ({"a": 0.5, "b": 0.9}, 0.5),
     ({"a": 0.1, "b": 0.2}, 0.0),
-])
+], ids=["all_pass", "half_pass", "none_pass"])
 def test_pass_rate_cases(scores, expected):
     assert pass_rate(scores, 0.7) == expected
 
