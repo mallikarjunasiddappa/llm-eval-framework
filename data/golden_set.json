@@ -1,0 +1,22 @@
+[
+    {
+        "id": "capital_sweden",
+        "prompt": "What is the capital of Sweden? Answer in one word.",
+        "must_contain": ["stockholm"]
+    },
+    {
+        "id": "capital_norway",
+        "prompt": "what is the capital of Norway? Answer in one word.",
+        "must_contain": ["oslo"]
+    },
+    {
+        "id": "stockholm_country",
+        "prompt": "Describe Stockholm in one sentence, including which country it is in.",
+        "must_contain": ["stockholm", "sweden"]
+    },
+    {
+        "id": "capital_denmark",
+        "prompt": "what is the capital of denmark? Answer in one word",
+        "must_contain": ["copenhagen"]
+    }
+]
