@@ -1,3 +1,10 @@
+# test_metrics.py - unit tests for ai_qa/metrics.py. Fast, no API calls (marker: metrics).
+#   test_two_of_three_pass        2 of 3 scores reach 0.7 -> 0.67
+#   test_empty_scores_raise_error empty dict must raise ValueError (pytest.raises)
+#   test_pass_rate_cases          parametrize: one run per row; ids = readable row names
+#   test_float_approx             0.1 + 0.2 is 0.30000000000000004 -> use pytest.approx
+#   test_average_score            0.7666... equals 0.7667 within abs=0.001 (0.7657-0.7677)
+
 import pytest
 from ai_qa.metrics import pass_rate, average_score
 
