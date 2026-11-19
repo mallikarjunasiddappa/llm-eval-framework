@@ -1,3 +1,5 @@
 pytest
 openai
 python-dotenv
+deepeval
+anthropic
