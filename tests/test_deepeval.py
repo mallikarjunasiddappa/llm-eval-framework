@@ -1,15 +1,15 @@
 # test_deepeval.py - DeepEval quality gate over the golden dataset (marker: llm).
 #   AI under test: gpt-4o-mini via ask().  Judge: Claude Haiku via DeepEval.
-#   Each case counts only if it is RELEVANT (judge score) AND CORRECT (all must_contain words).
-#   A wrong answer gets 0.0 even if relevant -> prevents false negatives (wrong answer, green gate).
-#   pass_rate(scores, 0.7): 0.7 = threshold per answer; assert rate >= 0.8 = gate for the whole set.
+#   Per case: relevancy (AnswerRelevancyMetric) + correctness (G-Eval vs the reference answer).
+#   Correctness = zero tolerance: any case with G-Eval score < 0.7 fails the test and is named.
+#   Relevancy  = pass rate: pass_rate(scores, 0.7) must be >= 0.8.
 #   Run: python -m pytest -v -s -m llm -k relevancy
 
 import json
 import pytest
-from deepeval.metrics import AnswerRelevancyMetric
+from deepeval.metrics import AnswerRelevancyMetric, GEval
 from deepeval.models import AnthropicModel
-from deepeval.test_case import LLMTestCase
+from deepeval.test_case import LLMTestCase, SingleTurnParams
 from ai_qa.llm import ask
 from ai_qa.metrics import pass_rate
 
@@ -25,20 +25,32 @@ def test_golden_set_relevancy_gate():
     wrong = []
     for case in CASES:
         answer = ask(case["prompt"])
-        metric = AnswerRelevancyMetric(threshold=0.7, model=JUDGE)
-        metric.measure(LLMTestCase(input=case["prompt"], actual_output=answer))
+        test_case = LLMTestCase(
+            input=case["prompt"],
+            actual_output=answer,
+            expected_output=case["expected_output"]
+        )
+        relevancy  = AnswerRelevancyMetric(threshold=0.7, model=JUDGE)
+        relevancy.measure(test_case)
 
-        correct = True
-        for word in case["must_contain"]:
-            if word not in answer.lower():
-                correct = False
+        correctness = GEval(
+            name="correctness",
+            criteria="Determine whether the actual output is factually consistent with the expected output.",
+            evaluation_params=[
+                SingleTurnParams.INPUT,
+                SingleTurnParams.ACTUAL_OUTPUT,
+                SingleTurnParams.EXPECTED_OUTPUT
+            ],
+            model=JUDGE,
+            threshold=0.7
+        )
 
-        if correct:
-            scores[case["id"]] = metric.score
-        else:
-            scores[case["id"]] = 0.0
+        correctness.measure(test_case)
+        scores[case["id"]] = relevancy.score
+        if correctness.score is None or correctness.score < 0.7:
             wrong.append(case["id"])
-        print(f"{case['id']}: relevancy={metric.score} correct={correct} | {answer}")
-    assert wrong == [], f"Incorrect answers: {wrong}"   #Hard gate: the list must be empty; otherwise fail and name the wrong cases
+        print(f"{case['id']}: relevancy={relevancy.score} correctness={correctness.score} | {answer}")
+
+    assert wrong == [], f"Incorrect answers: {wrong}"
     rate = pass_rate(scores, 0.7)
     assert rate >= 0.8
