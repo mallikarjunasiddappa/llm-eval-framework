@@ -2,21 +2,25 @@
     {
         "id": "capital_sweden",
         "prompt": "What is the capital of Sweden? Answer in one word.",
-        "must_contain": ["stockholm"]
+        "must_contain": ["stockholm"],
+        "expected_output": "Stockholm"
     },
     {
         "id": "capital_norway",
         "prompt": "what is the capital of Norway? Answer in one word.",
-        "must_contain": ["oslo"]
+        "must_contain": ["oslo"],
+        "expected_output": "Oslo"
     },
     {
         "id": "stockholm_country",
         "prompt": "Describe Stockholm in one sentence, including which country it is in.",
-        "must_contain": ["stockholm", "sweden"]
+        "must_contain": ["stockholm", "sweden"],
+        "expected_output": "Stockholm is the capital of Sweden."
     },
     {
         "id": "capital_denmark",
         "prompt": "what is the capital of denmark? Answer in one word",
-        "must_contain": ["copenhagen"]
+        "must_contain": ["copenhagen"],
+        "expected_output": "Copenhagen"
     }
 ]
