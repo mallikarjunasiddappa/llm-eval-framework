@@ -1,22 +1,26 @@
 # test_deepeval.py - DeepEval quality gate over the golden dataset (marker: llm).
-#   AI under test: gpt-4o-mini via ask().  Judge: Claude Haiku via DeepEval.
-#   Per case: relevancy (AnswerRelevancyMetric) + correctness (G-Eval vs the reference answer).
-#   Correctness = zero tolerance: any case with G-Eval score < 0.7 fails the test and is named.
-#   Relevancy  = pass rate: pass_rate(scores, 0.7) must be >= 0.8.
+#   AI under test: gpt-4o-mini via ask().  Judge + thresholds: ai_qa/judge.py.
+#   Per case: relevancy (no reference) + G-Eval correctness (vs expected_output).
+#   Correctness = zero tolerance: any case below CORRECTNESS_THRESHOLD fails and is named.
+#   Relevancy  = soft gate: pass_rate(scores, RELEVANCY_THRESHOLD) must be >= 0.8.
 #   Run: python -m pytest -v -s -m llm -k relevancy
 
 import json
 import pytest
-from deepeval.metrics import AnswerRelevancyMetric, GEval
-from deepeval.models import AnthropicModel
-from deepeval.test_case import LLMTestCase, SingleTurnParams
+from deepeval.test_case import LLMTestCase
 from ai_qa.llm import ask
 from ai_qa.metrics import pass_rate
+from ai_qa.judge import (
+    relevancy_metric,
+    correctness_metric,
+    RELEVANCE_THRESHOLD,
+    CORRECTNESS_THRESHOLD
+    
+)
 
 with open("data/golden_set.json") as f:
     CASES = json.load(f)
 
-JUDGE = AnthropicModel(model="claude-haiku-5-5")
 
 
 @pytest.mark.llm
@@ -30,27 +34,16 @@ def test_golden_set_relevancy_gate():
             actual_output=answer,
             expected_output=case["expected_output"]
         )
-        relevancy  = AnswerRelevancyMetric(threshold=0.7, model=JUDGE)
+        relevancy=relevancy_metric()
         relevancy.measure(test_case)
-
-        correctness = GEval(
-            name="correctness",
-            criteria="Determine whether the actual output is factually consistent with the expected output.",
-            evaluation_params=[
-                SingleTurnParams.INPUT,
-                SingleTurnParams.ACTUAL_OUTPUT,
-                SingleTurnParams.EXPECTED_OUTPUT
-            ],
-            model=JUDGE,
-            threshold=0.7
-        )
-
+        correctness = correctness_metric()
         correctness.measure(test_case)
+
         scores[case["id"]] = relevancy.score
-        if correctness.score is None or correctness.score < 0.7:
+        if correctness.score is None or correctness.score < CORRECTNESS_THRESHOLD:
             wrong.append(case["id"])
         print(f"{case['id']}: relevancy={relevancy.score} correctness={correctness.score} | {answer}")
 
     assert wrong == [], f"Incorrect answers: {wrong}"
-    rate = pass_rate(scores, 0.7)
+    rate = pass_rate(scores, RELEVANCE_THRESHOLD)
     assert rate >= 0.8
