@@ -9,13 +9,13 @@ from deepeval.models import AnthropicModel
 from deepeval.test_case import SingleTurnParams
 
 JUDGE_MODEL = "claude-haiku-5-5"
-RELEVANCE_THRESHOLD = 0.7
+RELEVANCY_THRESHOLD = 0.7
 CORRECTNESS_THRESHOLD = 0.7
 
 JUDGE = AnthropicModel(model=JUDGE_MODEL)
 
 def relevancy_metric():
-    return AnswerRelevancyMetric(threshold=RELEVANCE_THRESHOLD, model=JUDGE)
+    return AnswerRelevancyMetric(threshold=RELEVANCY_THRESHOLD, model=JUDGE)
 
 def correctness_metric():
     return GEval(
