@@ -23,7 +23,7 @@ def relevancy_metric():
 def correctness_metric():
     return GEval(
         name="correctness",
-        criteria="Determine whether the actual output is factually consistent with the expected output.",
+        criteria="Determine whether the actual output is factually consistent with the expected output. Extra correct details beyond the expected output are fine and must not be penalized, unless they contradict the expected output or are factually wrong.",
         evaluation_params=[
             SingleTurnParams.INPUT,
             SingleTurnParams.ACTUAL_OUTPUT,
