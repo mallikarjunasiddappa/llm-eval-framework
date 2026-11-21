@@ -13,7 +13,7 @@ from ai_qa.metrics import pass_rate
 from ai_qa.judge import (
     relevancy_metric,
     correctness_metric,
-    RELEVANCE_THRESHOLD,
+    RELEVANCY_THRESHOLD,
     CORRECTNESS_THRESHOLD
     
 )
@@ -45,5 +45,5 @@ def test_golden_set_relevancy_gate():
         print(f"{case['id']}: relevancy={relevancy.score} correctness={correctness.score} | {answer}")
 
     assert wrong == [], f"Incorrect answers: {wrong}"
-    rate = pass_rate(scores, RELEVANCE_THRESHOLD)
+    rate = pass_rate(scores, RELEVANCY_THRESHOLD)
     assert rate >= 0.8
