@@ -9,15 +9,19 @@
 import openai
 from dotenv import load_dotenv
 from openai import OpenAI
+from functools import lru_cache
 
 load_dotenv()
-client = OpenAI()
+
+@lru_cache
+def get_client():
+    return OpenAI()
 
 DEFAULT_MODEL = "gpt-4o-mini"
 
 def ask(prompt, model=DEFAULT_MODEL):
     try:
-        response = client.responses.create(
+        response = get_client().responses.create(
             model= model,
             input= prompt,
         )
