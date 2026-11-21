@@ -7,15 +7,18 @@
 from deepeval.metrics import AnswerRelevancyMetric, GEval
 from deepeval.models import AnthropicModel
 from deepeval.test_case import SingleTurnParams
+from functools import lru_cache
 
 JUDGE_MODEL = "claude-haiku-5-5"
 RELEVANCY_THRESHOLD = 0.7
 CORRECTNESS_THRESHOLD = 0.7
 
-JUDGE = AnthropicModel(model=JUDGE_MODEL)
+@lru_cache
+def get_judge():
+    return AnthropicModel(model=JUDGE_MODEL)
 
 def relevancy_metric():
-    return AnswerRelevancyMetric(threshold=RELEVANCY_THRESHOLD, model=JUDGE)
+    return AnswerRelevancyMetric(threshold=RELEVANCY_THRESHOLD, model=get_judge())
 
 def correctness_metric():
     return GEval(
@@ -26,6 +29,6 @@ def correctness_metric():
             SingleTurnParams.ACTUAL_OUTPUT,
             SingleTurnParams.EXPECTED_OUTPUT
         ],
-        model=JUDGE,
+        model=get_judge(),
         threshold=CORRECTNESS_THRESHOLD,
     )
