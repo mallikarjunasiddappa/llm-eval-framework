@@ -11,16 +11,17 @@ from ai_qa.llm import ask
 from ai_qa.judge import relevancy_metric, correctness_metric
 
 with open("data/golden_set.json") as f:
-    CASE = json.load(f)
+    CASES = json.load(f)
 
 @pytest.mark.llm
-def test_capital_sweden_native():
-    question = "What is the capital of Sweden?"
-    answer = ask(question)
+@pytest.mark.parametrize("case", CASES, ids=[c["id"] for c in CASES])
+def test_golden_case_native(case):
+    answer = ask(case["prompt"])
     test_case = LLMTestCase(
-        input=question,
+        name=case["id"],
+        input=case["prompt"],
         actual_output=answer,
-        expected_output="Stockholm"
+        expected_output=case["expected_output"]
     )
 
     assert_test(test_case, [relevancy_metric(), correctness_metric()])
