@@ -20,7 +20,7 @@ def test_capital_sweden_native():
     test_case = LLMTestCase(
         input=question,
         actual_output=answer,
-        expected_output="Oslo"
+        expected_output="Stockholm"
     )
 
     assert_test(test_case, [relevancy_metric(), correctness_metric()])
