@@ -3,3 +3,4 @@ openai
 python-dotenv
 deepeval
 anthropic
+portalocker[win32]; sys_platform == "win32"
