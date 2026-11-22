@@ -27,3 +27,4 @@ def test_golden_data_is_valid():
         assert isinstance(case["prompt"], str)
         assert isinstance(case["must_contain"], list), f"{case['id']}: must_contain must be a list"
         assert isinstance(case["expected_output"], str), f"{case['id']}: expected_output must be text"
+        assert case["expected_output"].strip() != "", f"{case['id']}: expected_output is empty"
