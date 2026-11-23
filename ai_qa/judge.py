@@ -20,10 +20,15 @@ def get_judge():
 def relevancy_metric():
     return AnswerRelevancyMetric(threshold=RELEVANCY_THRESHOLD, model=get_judge())
 
-def correctness_metric():
+def correctness_metric(verbose=False):
     return GEval(
         name="correctness",
-        criteria="Determine whether the actual output is factually consistent with the expected output. Extra correct details beyond the expected output are fine and must not be penalized, unless they contradict the expected output or are factually wrong.",
+        evaluation_steps=[
+            "Identify the key facts in the Expected Output that answer the Input.",
+            "Check whether the Actual Output states those key facts without contradicting them.",
+            "Do not penalize extra details in the Actual Output if they are factually correct and do not contradict the Expected Output.",
+            "Heavily penalize any claim that contradicts the Expected Output or is factually wrong.",
+        ],
         evaluation_params=[
             SingleTurnParams.INPUT,
             SingleTurnParams.ACTUAL_OUTPUT,
@@ -31,4 +36,5 @@ def correctness_metric():
         ],
         model=get_judge(),
         threshold=CORRECTNESS_THRESHOLD,
+        verbose_mode=verbose,
     )
