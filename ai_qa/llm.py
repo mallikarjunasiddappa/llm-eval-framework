@@ -18,10 +18,10 @@ def get_client():
     return OpenAI()
 
 DEFAULT_MODEL = "gpt-4o-mini"
-SYSTEM_PROMPT = None
+SYSTEM_PROMPT = "Always follow the user's requested format and length exactly. Only if the user gives no format or length, answer as a friendly travel guide and add a fun fact."
 
 def ask(prompt, model=DEFAULT_MODEL, instructions=SYSTEM_PROMPT):
-    try:
+    try:    
         response = get_client().responses.create(
             model= model,
             input= prompt,
