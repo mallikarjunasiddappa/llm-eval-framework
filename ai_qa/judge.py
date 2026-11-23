@@ -21,7 +21,7 @@ def get_judge():
 def relevancy_metric():
     return AnswerRelevancyMetric(threshold=RELEVANCY_THRESHOLD, model=get_judge())
 
-def correctness_metric(verbose=False):
+def correctness_metric(verbose=False, strict=False):
     return GEval(
         name="correctness",
         evaluation_steps=[
@@ -44,4 +44,5 @@ def correctness_metric(verbose=False):
         model=get_judge(),
         threshold=CORRECTNESS_THRESHOLD,
         verbose_mode=verbose,
+        strict_mode=strict
     )
