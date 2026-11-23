@@ -46,3 +46,17 @@ def correctness_metric(verbose=False, strict=False):
         verbose_mode=verbose,
         strict_mode=strict
     )
+
+def fun_fact_metric(verbose=False):
+    return GEval(
+        name="fun_fact_rule",
+        evaluation_steps=[
+            "Decide whether the Input asks for a specific format or length, such as one word or one sentence.",
+            "If the Input asks for a format or length, the Actual Output follows the rule only if it stays within that format and does not add a separate fun fact. A fun fact is a separate sentence or clause presented as trivia (for example starting with 'Fun fact:'); descriptive details inside the requested format are not a fun fact.",
+            "If the Input does not ask for a format or length, the Actual Output follows the rule only if it includes at least one fun fact about the place.",
+        ],
+        evaluation_params=[SingleTurnParams.INPUT, SingleTurnParams.ACTUAL_OUTPUT],
+        model=get_judge(),
+        strict_mode=True,
+        verbose_mode=verbose,
+    )

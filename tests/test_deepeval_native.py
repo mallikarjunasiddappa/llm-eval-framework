@@ -8,7 +8,7 @@ import pytest
 from deepeval import assert_test
 from deepeval.test_case import LLMTestCase
 from ai_qa.llm import ask
-from ai_qa.judge import relevancy_metric, correctness_metric
+from ai_qa.judge import relevancy_metric, correctness_metric, fun_fact_metric
 
 with open("data/golden_set.json") as f:
     CASES = json.load(f)
@@ -24,4 +24,4 @@ def test_golden_case_native(case):
         expected_output=case["expected_output"]
     )
 
-    assert_test(test_case, [relevancy_metric(), correctness_metric()])
+    assert_test(test_case, [relevancy_metric(), correctness_metric(), fun_fact_metric()])

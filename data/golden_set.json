@@ -22,5 +22,11 @@
         "prompt": "what is the capital of denmark? Answer in one word",
         "must_contain": ["copenhagen"],
         "expected_output": "Copenhagen"
+    },
+    {
+        "id": "copenhagen_open",
+        "prompt": "What should I know about Copenhagen?",
+        "must_contain": ["Copenhagen"],
+        "expected_output": "Copenhagen is the capital of Denmark."
     }
 ]
