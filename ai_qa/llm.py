@@ -18,12 +18,14 @@ def get_client():
     return OpenAI()
 
 DEFAULT_MODEL = "gpt-4o-mini"
+SYSTEM_PROMPT = None
 
-def ask(prompt, model=DEFAULT_MODEL):
+def ask(prompt, model=DEFAULT_MODEL, instructions=SYSTEM_PROMPT):
     try:
         response = get_client().responses.create(
             model= model,
             input= prompt,
+            instructions=instructions,
         )
     except openai.APIError as error:
         raise RuntimeError(f"LLM call failed for model '{model}': {error}") from error
