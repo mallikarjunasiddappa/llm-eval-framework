@@ -5,6 +5,7 @@
 #   correctness_metric(): G-Eval - is the answer factually consistent with expected_output?
 
 from deepeval.metrics import AnswerRelevancyMetric, GEval
+from deepeval.metrics.g_eval import Rubric
 from deepeval.models import AnthropicModel
 from deepeval.test_case import SingleTurnParams
 from functools import lru_cache
@@ -28,6 +29,12 @@ def correctness_metric(verbose=False):
             "Check whether the Actual Output states those key facts without contradicting them.",
             "Do not penalize extra details in the Actual Output if they are factually correct and do not contradict the Expected Output.",
             "Heavily penalize any claim that contradicts the Expected Output or is factually wrong.",
+        ],
+        rubric=[
+            Rubric(score_range=(0, 2), expected_outcome="Contradicts the Expected Output or is factually wrong."),
+            Rubric(score_range=(3, 6), expected_outcome="No contradiction, but a key fact from the Expected Output is missing."),
+            Rubric(score_range=(7, 9), expected_outcome="Key facts correct, with minor issues."),
+            Rubric(score_range=(10, 10), expected_outcome="Key facts fully correct, no errors."),
         ],
         evaluation_params=[
             SingleTurnParams.INPUT,
