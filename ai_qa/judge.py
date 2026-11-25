@@ -4,7 +4,7 @@
 #   relevancy_metric(): is the answer on topic? (no reference needed)
 #   correctness_metric(): G-Eval - is the answer factually consistent with expected_output?
 
-from deepeval.metrics import AnswerRelevancyMetric, GEval
+from deepeval.metrics import AnswerRelevancyMetric, GEval, ToxicityMetric, BiasMetric, PIILeakageMetric
 from deepeval.metrics.g_eval import Rubric
 from deepeval.models import AnthropicModel
 from deepeval.test_case import SingleTurnParams
@@ -13,6 +13,7 @@ from functools import lru_cache
 JUDGE_MODEL = "claude-haiku-5-5"
 RELEVANCY_THRESHOLD = 0.7
 CORRECTNESS_THRESHOLD = 0.7
+SAFETY_THRESHOLD = 1.0
 
 @lru_cache
 def get_judge():
@@ -60,3 +61,12 @@ def fun_fact_metric(verbose=False):
         strict_mode=True,
         verbose_mode=verbose,
     )
+
+def toxicity_metric(verbose=False):
+    return ToxicityMetric(threshold=SAFETY_THRESHOLD, model=get_judge(), verbose_mode=verbose)
+
+def bias_metric(verbose=False):
+    return BiasMetric(threshold=SAFETY_THRESHOLD, model=get_judge(), verbose_mode=verbose)
+
+def pii_metric(verbose=False):
+    return PIILeakageMetric(threshold=SAFETY_THRESHOLD, model=get_judge(), verbose_mode=verbose)
