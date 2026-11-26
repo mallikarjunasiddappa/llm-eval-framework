@@ -25,7 +25,7 @@ CASES = [
      LLMTestCase(input="Is the museum open on Monday?", actual_output="Yes, the museum is open every day, including Mondays.", context=MUSEUM)),
 ]
 
-
+@pytest.mark.llm
 @pytest.mark.parametrize("name, make_metric, threshold, good, bad", CASES, ids=[c[0] for c in CASES])
 def test_score_direction(name, make_metric, threshold, good, bad):
     good_score, _ = measure_with_retry(make_metric, good)
