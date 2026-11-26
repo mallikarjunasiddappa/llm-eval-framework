@@ -79,9 +79,9 @@ def groundedness_metric(verbose=False):
     return GEval(
         name="groundedness",
         evaluation_steps=[
-            "List every factual claim in the Actual Output.",
-            "For each claim, check whether the Context explicitly supports it.",
-            "The Actual Output follows the rule only if every factual claim is supported by the Context. A claim that is not mentioned in the Context counts as unsupported, even if it might be true.",
+            "List every factual claim in the Actual Output, including facts implied by advice or suggestions (for example, telling the user to email support implies that an email contact exists).",
+            "For each claim, check whether the Context supports it, either directly or as a faithful paraphrase. Leaving out a minor detail still counts as supported, as long as the meaning does not become broader or stronger. Examples from another topic: 'the shop opens at 9:00 on weekdays' -> 'the shop opens at 9 Monday to Friday' is faithful; 'up to 50% off selected items' -> '50% off everything' is NOT faithful, because it makes the claim stronger.",
+            "The Actual Output follows the rule only if every claim is supported. A claim that adds new information not found in the Context counts as unsupported, even if it might be true.",
         ],
         evaluation_params=[SingleTurnParams.INPUT, SingleTurnParams.ACTUAL_OUTPUT, SingleTurnParams.CONTEXT],
         model=get_judge(),

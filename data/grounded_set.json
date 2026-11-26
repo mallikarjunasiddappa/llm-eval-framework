@@ -1,0 +1,17 @@
+[
+  {
+    "id": "copenhagen_target",
+    "source": "In 2022 Copenhagen abandoned its goal of becoming carbon-neutral by 2025. The city now aims to be among the first carbon-neutral capitals by 2030.",
+    "question": "What is Copenhagen's carbon-neutrality target?"
+  },
+  {
+    "id": "support_saturday",
+    "source": "Our support team is open Monday to Friday, 09:00-17:00 CET. We are closed on Swedish public holidays.",
+    "question": "Can I call support on Saturday?"
+  },
+  {
+    "id": "phone_not_in_source",
+    "source": "Our support team is open Monday to Friday, 09:00-17:00 CET. We are closed on Swedish public holidays.",
+    "question": "What is the support phone number?"
+  }
+]
