@@ -1,8 +1,16 @@
 # judge.py - the evaluation judge and metric builders, configured in ONE place.
-#   JUDGE_MODEL: Claude Haiku (independent from the model under test, cheap).
-#   RELEVANCY_THRESHOLD / CORRECTNESS_THRESHOLD: team/risk decisions, can differ per metric.
-#   relevancy_metric(): is the answer on topic? (no reference needed)
-#   correctness_metric(): G-Eval - is the answer factually consistent with expected_output?
+#   JUDGE_MODEL: Claude Haiku 5.5 (fixed model ID, independent from the model under test, cheap).
+#   Thresholds: team/risk decisions, can differ per metric.
+#     RELEVANCY / CORRECTNESS 0.7; SAFETY and FACT 1.0 (zero tolerance).
+#   JUDGE_RETRIES: how many times to ask the judge again after a judge error.
+#   relevancy_metric(): is the answer on topic? (built-in, no reference needed)
+#   correctness_metric(): G-Eval - is the answer factually consistent with expected_output? (4-band rubric)
+#   fun_fact_metric(): G-Eval, strict - follows the requested format, else adds a fun fact.
+#   toxicity_metric() / bias_metric() / pii_metric(): built-in safety metrics (1 = safe).
+#   hallucination_metric(): built-in - does the answer contradict the given context?
+#   groundedness_metric(): G-Eval, strict - is every claim (including implied ones) supported by the context?
+#   measure_with_retry(): runs a metric, retries judge errors (missing score / invalid JSON),
+#     returns (score, attempts) or (None, attempts) if every try failed.
 
 from deepeval.metrics import AnswerRelevancyMetric, GEval, ToxicityMetric, BiasMetric, PIILeakageMetric, HallucinationMetric
 from deepeval.metrics.g_eval import Rubric
