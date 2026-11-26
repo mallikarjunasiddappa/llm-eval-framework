@@ -1,0 +1,13 @@
+[
+  {"id": "museum_monday", "human": "pass", "final": "pass", "source": "The museum is open Tuesday to Sunday, 10:00-17:00. Closed on Mondays.", "question": "Can I visit on Monday?", "answer": "No, the museum is closed on Mondays."},
+  {"id": "parking_free", "human": "fail", "final": "fail", "source": "Parking costs 20 SEK per hour. The first 30 minutes are free.", "question": "Is parking free?", "answer": "Yes, parking is free."},
+  {"id": "refund_unused", "human": "pass", "final": "pass", "source": "Refunds are possible within 14 days if the product is unused.", "question": "Can I return it?", "answer": "Yes, within 14 days, as long as you haven't used it."},
+  {"id": "bakery_gluten", "human": "pass", "final": "fail", "note": "ambiguous: inference from 'flour', strict rule says unsupported", "source": "Our bakery uses organic flour in all breads.", "question": "Are your breads gluten-free?", "answer": "No, they contain flour, so they are not gluten-free."},
+  {"id": "train_duration", "human": "fail", "final": "fail", "source": "The train to Lund leaves every 20 minutes from platform 3.", "question": "How often does the train go?", "answer": "Every 20 minutes from platform 3. The trip takes about 25 minutes."},
+  {"id": "library_books", "human": "pass", "final": "pass", "source": "Library members can borrow up to 5 books for 3 weeks.", "question": "How many books can I borrow?", "answer": "Members can borrow up to five books."},
+  {"id": "gym_student_id", "human": "pass", "final": "fail", "source": "The gym offers a student discount of 15%.", "question": "Is there a discount?", "answer": "Yes, students get 15% off. Just show your student ID at reception."},
+  {"id": "hotel_wifi", "human": "pass", "final": "pass", "source": "The hotel has free Wi-Fi in all rooms and the lobby.", "question": "Is there Wi-Fi?", "answer": "Yes, free Wi-Fi is available in your room."},
+  {"id": "flight_on_time", "human": "pass", "final": "fail", "source": "Most flights from this airport are on time.", "question": "Will my flight be on time?", "answer": "Yes, your flight will be on time."},
+  {"id": "course_payment", "human": "fail", "final": "fail", "source": "The course costs 2,000 SEK. Payment can be made by card or invoice.", "question": "How can I pay?", "answer": "You can pay by card or invoice, or contact us for other options."},
+  {"id": "invented_advice", "human": "fail", "final": "fail", "source": "Our support team is open Monday to Friday, 09:00-17:00 CET. We are closed on Swedish public holidays.", "question": "What is the support phone number?", "answer": "The support phone number isn't provided in the information you gave. You might want to check the official website or contact them via email."}
+]

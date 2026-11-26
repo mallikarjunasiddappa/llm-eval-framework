@@ -9,12 +9,15 @@ from deepeval.metrics.g_eval import Rubric
 from deepeval.models import AnthropicModel
 from deepeval.test_case import SingleTurnParams
 from functools import lru_cache
+from pydantic import ValidationError
+from deepeval.errors import DeepEvalError
 
 JUDGE_MODEL = "claude-haiku-5-5"
 RELEVANCY_THRESHOLD = 0.7
 CORRECTNESS_THRESHOLD = 0.7
 SAFETY_THRESHOLD = 1.0
 FACT_THRESHOLD = 1.0
+JUDGE_RETRIES = 3
 
 @lru_cache
 def get_judge():
@@ -88,3 +91,14 @@ def groundedness_metric(verbose=False):
         strict_mode=True,
         verbose_mode=verbose,
     )
+
+def measure_with_retry(make_metric, test_case, attempts=JUDGE_RETRIES):
+    for attempt in range(1, attempts + 1):
+        metric = make_metric()
+        try:
+            metric.measure(test_case)
+        except (ValidationError, DeepEvalError):
+            continue
+        if metric.score is not None:
+            return metric.score, attempt
+    return None, attempts
